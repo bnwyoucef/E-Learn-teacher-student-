@@ -9,14 +9,6 @@ const TeacherContent = () => {
   return (
     <div>
         <TeacherSideBar />
-      {/* <Grid container spacing={1}>
-            <Grid item xs={2}>
-                <TeacherSideBar />
-            </Grid>
-            <Grid item xs={10}>
-                <TeacherDashboard />
-            </Grid>
-      </Grid> */}
     </div>
   )
 }
