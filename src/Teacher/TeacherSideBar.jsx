@@ -20,6 +20,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import TeacherDashboard from './TeacherDashboard/TeacherDashboard'
 import ChapterControl from './ChapterControl/ChapterControl';
+import MarksControl from './MarksControl/MarksControl'
 
 const drawerWidth = 240;
 
@@ -181,7 +182,7 @@ const TeacherSideBar = () => {
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          <ChapterControl />
+          <MarksControl />
         </Box>
       </Box>
     );
