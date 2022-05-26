@@ -7,6 +7,7 @@ import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
+import {Avatar} from '@mui/material'
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -16,8 +17,13 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import ChatIcon from '@mui/icons-material/Chat';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
 import TeacherDashboard from './TeacherDashboard/TeacherDashboard'
 import ChapterControl from './ChapterControl/ChapterControl';
 import MarksControl from './MarksControl/MarksControl'
@@ -39,9 +45,9 @@ const closedMixin = (theme) => ({
     duration: theme.transitions.duration.leavingScreen,
   }),
   overflowX: 'hidden',
-  width: `calc(${theme.spacing(7)} + 1px)`,
+  width: `calc(${theme.spacing(7)} + 2px)`,
   [theme.breakpoints.up('sm')]: {
-    width: `calc(${theme.spacing(8)} + 1px)`,
+    width: `calc(${theme.spacing(8)} + 2px)`,
   },
 });
 
@@ -103,35 +109,73 @@ const TeacherSideBar = () => {
   
     return (
       <Box sx={{ display: 'flex' }}>
-        <CssBaseline />
-        <AppBar position="fixed" open={open}>
+        {/* <CssBaseline /> */}
+        {/* <AppBar position="fixed" open={open}>
           <Toolbar>
-            <IconButton
+            
+            <Typography variant="h6" noWrap component="div">
+              Mini variant drawer
+            </Typography>
+          </Toolbar>
+        </AppBar> */}
+        <Drawer
+        PaperProps={{
+          sx: {
+          backgroundColor: "#007AFF",
+          background: 'linear-gradient(177.14deg, #007AFF 78.29%, #BBE1FA 105.35%)',
+          color: "white",
+          }
+      }}
+      sx={{
+        flexShrink: 0,
+        '& .MuiDrawer-paper': {
+            boxSizing: 'border-box',
+        },
+        }}
+        anchor="left"
+        variant="permanent" open={open}>
+        <IconButton
               color="inherit"
               aria-label="open drawer"
               onClick={handleDrawerOpen}
               edge="start"
               sx={{
-                marginRight: 5,
+                marginRight: "auto",
+                marginLeft:"auto",
                 ...(open && { display: 'none' }),
               }}
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              Mini variant drawer
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer variant="permanent" open={open}>
           <DrawerHeader>
-            <IconButton onClick={handleDrawerClose}>
+            {open &&<IconButton onClick={handleDrawerClose}>
               {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-            </IconButton>
+            </IconButton>}
           </DrawerHeader>
+          <Toolbar style={{margin:"-5px"}}>
+                <Avatar sx={{ bgcolor: 'white',color: '#266fff',width:32,height:32}}></Avatar>
+                <Typography style={{ marginLeft:'20px'}}>
+                    Teacher
+                </Typography>
+            </Toolbar>
           <Divider />
-          <List>
-            {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
+          <List
+          sx={{
+          '& .MuiListItem-root': {
+              '&, & .MuiListItemIcon-root': {
+                  color: 'white',
+              },
+          },
+          //change the background color of item when it clicked
+          '& .MuiListItem-root:focus': {
+              bgcolor: 'white',
+              borderRadius: 2,
+              '&, & .MuiListItemIcon-root': {
+                  color: '#266fff',
+              },
+          },
+          }}>
+            {['Dashboard','Chapters management','Marks management'].map((text, index) => (
               <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   sx={{
@@ -147,16 +191,30 @@ const TeacherSideBar = () => {
                       justifyContent: 'center',
                     }}
                   >
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    {index === 0 ? <DashboardIcon /> : index === 1 ? <BookmarksIcon/> : <LibraryBooksIcon/>}
                   </ListItemIcon>
                   <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>
               </ListItem>
             ))}
           </List>
-          <Divider />
-          <List>
-            {['All mail', 'Trash', 'Spam'].map((text, index) => (
+          <List style={{ marginTop:'auto',marginBottom:'10px'}}
+          sx={{
+            '& .MuiListItem-root': {
+                '&, & .MuiListItemIcon-root': {
+                    color: 'white',
+                },
+            },
+            //change the background color of item when it clicked
+            '& .MuiListItem-root:focus': {
+                bgcolor: 'white',
+                borderRadius: 2,
+                '&, & .MuiListItemIcon-root': {
+                    color: '#266fff',
+                },
+            },
+            }}>
+            {['Chat', 'Settings', 'Exit'].map((text, index) => (
               <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   sx={{
@@ -172,7 +230,7 @@ const TeacherSideBar = () => {
                       justifyContent: 'center',
                     }}
                   >
-                    {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                    {index === 0 ? <ChatIcon /> : index === 1 ? <SettingsIcon/> : <LogoutIcon/>}
                   </ListItemIcon>
                   <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                 </ListItemButton>

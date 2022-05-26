@@ -5,6 +5,7 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import {Avatar,Typography,Divider} from "@mui/material";
+import BookIcon from '@mui/icons-material/Book';
 import axios from '../../API/Axios'
 import { useState,useEffect } from 'react'
 
@@ -24,7 +25,7 @@ const Modules = () => {
   
     async function getTeachers() {
       try {
-        const response = await axios.get('teacher/all')
+        const response = await axios.get('module/all')
         setModulesList(response.data.message.sort(compare))
       }catch(err) {
         console.log(err.message);
@@ -35,7 +36,7 @@ const Modules = () => {
   
     return (
       <div style= {{marginLeft:'10px',overflow: 'hidden',borderRadius: '10px',backgroundColor: 'white',height: '50vh',border:'1px solid #E5E5E5'}}>
-        <div>
+        <div style={{padding:"10px"}}>
           <Typography variant="h6" style={{flex: 1}}>
             Modules
           </Typography>
@@ -60,10 +61,8 @@ const Modules = () => {
               
             >
               <ListItemButton>
-                <ListItemAvatar>
-                  <Avatar>{value.name.charAt(0).toUpperCase()}</Avatar>
-                </ListItemAvatar>
-                <ListItemText id={labelId} primary={`${value.name + ' ' + value.lastName}`} />
+              <BookIcon color='primary'/>
+                <ListItemText id={labelId} primary={`${value.name}`} style={{marginLeft:"10px"}} />
               </ListItemButton>
             </ListItem>
           );

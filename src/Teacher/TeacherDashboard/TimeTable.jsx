@@ -1,6 +1,7 @@
 import React from 'react'
 import DaySessions from './DaySessions'
 import { useState,useEffect } from 'react'
+import {Typography,Divider} from '@mui/material'
 import axios from '../../API/Axios'
 
 const TimeTable = () => {
@@ -27,11 +28,13 @@ const TimeTable = () => {
     useEffect(() =>{getLessons()},[])
   
     return (
-      <div style= {{marginLeft:'10px',overflow: 'hidden',borderRadius: '10px',backgroundColor: 'white',height: '500px',border:'1px solid #E5E5E5'}}>
-        <div style={{marginLeft:'10px',}}>
-          My schedule
+      <div style= {{marginLeft:'10px',overflow: 'hidden',borderRadius: '10px',backgroundColor: 'white',height: '510px',border:'1px solid #E5E5E5'}}>
+        <div style={{padding:"10px"}}>
+          <Typography variant="h6" style={{flex: 1}}>
+            My schedule
+          </Typography>
         </div>
-        <div style= {{overflow: 'hidden',backgroundColor: 'white',height: '430px',border:'1px solid #E5E5E5',display: 'flex',justifyContent: 'center'}}>
+        <div style= {{padding:"10px",paddingBottom:"10px",overflow: 'hidden',backgroundColor: 'white',height: '430px',display: 'flex',justifyContent: 'center'}}>
           <DaySessions dayName={'Sunday'} dayList={sundayList}/> 
           <DaySessions dayName={'Monday'} dayList={mondayList}/> 
           <DaySessions dayName={'Tuesday'} dayList={tuesdayList}/> 
