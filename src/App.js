@@ -1,9 +1,9 @@
-import TeacherContent from "./Teacher/TeacherContent";
+import SignIn from "./SignIn/SignIn";
 
 function App() {
   return (
     <div className="App">
-      <TeacherContent />
+      <SignIn />
     </div>
   );
 }

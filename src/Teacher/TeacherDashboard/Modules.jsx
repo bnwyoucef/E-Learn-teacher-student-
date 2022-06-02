@@ -12,6 +12,14 @@ import { useState,useEffect } from 'react'
 
 const Modules = () => {
     const [modulesList,setModulesList] = useState([])
+    const [teacherId,setTeacherId] = useState(0);
+
+    useEffect(() => {
+      if(localStorage.getItem('loginStatus')){
+        const loginStatus = JSON.parse(localStorage.getItem('loginStatus'))
+        setTeacherId(parseInt(loginStatus.currentUser.id));
+      }
+    },[])
   
     function compare( a, b ) {
       if ( a.name.toUpperCase() < b.name.toUpperCase() ){
@@ -23,16 +31,18 @@ const Modules = () => {
       return 0;
     }
   
-    async function getTeachers() {
+    async function getMyModules() {
       try {
-        const response = await axios.get('module/all')
-        setModulesList(response.data.message.sort(compare))
+        if(teacherId) {
+          const response = await axios.get(`teacher/modulesOfTeacher/${teacherId}`)
+          setModulesList(response.data.message.sort(compare))
+        }
       }catch(err) {
         console.log(err.message);
       }
     }
   
-    useEffect(()=> {getTeachers()},[])
+    useEffect(()=> {getMyModules()},[teacherId])
   
     return (
       <div style= {{marginLeft:'10px',overflow: 'hidden',borderRadius: '10px',backgroundColor: 'white',height: '50vh',border:'1px solid #E5E5E5'}}>
@@ -41,10 +51,11 @@ const Modules = () => {
             Modules
           </Typography>
         </div>
+        <Divider />
       <List
         dense
         disablePadding
-        sx={{ width: "100%",height: "85%",overflow: "auto",bgcolor: "background.paper",
+        sx={{ width: "100%",marginTop:'10px',height: "85%",overflow: "auto",bgcolor: "background.paper",
         //change the background color of item when it clicked
           '& .MuiListItemButton-root:focus': {
             bgcolor: '#7da9ff',
@@ -57,12 +68,12 @@ const Modules = () => {
           return (
             <ListItem
               key={value.id}
-              disablePadding
-              
+              disablePadding  
             >
               <ListItemButton>
               <BookIcon color='primary'/>
-                <ListItemText id={labelId} primary={`${value.name}`} style={{marginLeft:"10px"}} />
+                <ListItemText id={labelId} primary={value.name} style={{marginLeft:"10px"}} />
+                <ListItemText id={labelId} primary={value.isTheLecturer?"Lecturer":""} style={{marginLeft:"10px"}} />
               </ListItemButton>
             </ListItem>
           );

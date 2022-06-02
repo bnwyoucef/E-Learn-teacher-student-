@@ -26,7 +26,7 @@ const DaySessions = ({dayName,dayList}) => {
             },
           }}
         >
-          {dayList.map((lesson) => {
+          {dayList?dayList.map((lesson) => {
             const labelId = `checkbox-list-secondary-label-${lesson.id}`;
             return (
               <div key={lesson.id}>
@@ -43,7 +43,7 @@ const DaySessions = ({dayName,dayList}) => {
                   <Divider />
               </div>
             );
-          })}
+          }):''}
         </List>
         </div>
       );

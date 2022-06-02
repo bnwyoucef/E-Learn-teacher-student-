@@ -6,9 +6,8 @@ import Modules from './Modules'
 import Groups from './Groups'
 import Header from '../Header'
 import Calendar from './Calendar'
-import CurrentSemester from './CurrentSemester'
 
-const TeacherDashboard = () => {
+const TeacherDashboard = ({teacherLoged}) => {
   return (
     <div>
       <Grid container spacing={2}>
@@ -19,21 +18,18 @@ const TeacherDashboard = () => {
             <NewsControl />
         </Grid>
         <Grid item xs={8}>
-          <TimeTable />
+          <TimeTable teacherId={teacherLoged.id}/>
         </Grid>
         <Grid item xs={4}>
           <Grid item sm={12}>
            <Calendar />
-          </Grid>
-          <Grid item sm={4}>
-            <CurrentSemester />
           </Grid>        
         </Grid>
         <Grid item xs={6}>
-          <Modules />
+          <Modules teacherId={teacherLoged.id}/>
         </Grid>
         <Grid item xs={6}>
-          <Groups />
+          <Groups teacherId={teacherLoged.id}/>
         </Grid>
       </Grid>
     </div>

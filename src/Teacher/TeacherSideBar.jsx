@@ -27,6 +27,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import TeacherDashboard from './TeacherDashboard/TeacherDashboard'
 import ChapterControl from './ChapterControl/ChapterControl';
 import MarksControl from './MarksControl/MarksControl'
+import {useState,useEffect} from 'react';
 
 const drawerWidth = 240;
 
@@ -98,6 +99,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const TeacherSideBar = () => {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+    const [currentTeacher,setCurrentUser] = useState({})
+    useEffect(() => {
+      if(localStorage.getItem('loginStatus')){
+        const loginStatus = JSON.parse(localStorage.getItem('loginStatus'))
+        setCurrentUser(loginStatus.currentUser);
+      }
+    },[])
   
     const handleDrawerOpen = () => {
       setOpen(true);
@@ -153,9 +161,13 @@ const TeacherSideBar = () => {
             </IconButton>}
           </DrawerHeader>
           <Toolbar style={{margin:"-5px"}}>
-                <Avatar sx={{ bgcolor: 'white',color: '#266fff',width:32,height:32}}></Avatar>
+                <Avatar 
+                  sx={{ bgcolor: 'white',color: '#266fff',width:32,height:32}}     
+                  alt="admin image"
+                  src={currentTeacher?currentTeacher.profileImage?`https://schoolsystemmanagement-production-9724.up.railway.app/teacher/profile-images/${currentTeacher.profileImage}`:'':''}
+                />
                 <Typography style={{ marginLeft:'20px'}}>
-                    Teacher
+                    {currentTeacher.name + ' ' + currentTeacher.lastName}
                 </Typography>
             </Toolbar>
           <Divider />
@@ -240,7 +252,7 @@ const TeacherSideBar = () => {
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          <MarksControl />
+          <TeacherDashboard teacherLoged={currentTeacher} />
         </Box>
       </Box>
     );

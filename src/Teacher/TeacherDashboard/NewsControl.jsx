@@ -26,60 +26,66 @@ const NewsControl = () => {
     const [groups,setMyGroups] = useState([]);
     const [displayMsg,setDisplayMsg] = useState(false);
     const [createSuccess,setCreateSuccess] = useState(false);
-    const [checkedGroups,setCheckedGroups] = useState({})
+    const [checkedGroups,setCheckedGroups] = useState([])
+    const [teacherId,setTeacherId] = useState(0);
 
+    useEffect(() => {
+      if(localStorage.getItem('loginStatus')){
+        const loginStatus = JSON.parse(localStorage.getItem('loginStatus'))
+        setTeacherId(parseInt(loginStatus.currentUser.id));
+      }
+    },[])
 
-
-    async function getGroups() {
-        try{
-        const response = await axios.get(`/section/1`);
-        console.log(response)
-        setMyGroups(response.data.message.groups);
-        const checkedgrps=response.data.message.groups.map(group=>{group.checked=false
-        return group.checked;
-        })
-        console.log(groups);
-        setCheckedGroups(checkedgrps)
-        console.log(checkedGroups);
-    }
-        catch(err){
-            console.log(err.message);
+    async function getMyGroups() {
+      try {
+        if(teacherId) {
+          const response = await axios.get(`teacher/${teacherId}/groups`)
+          setMyGroups(response.data.message)  
         }
-
+      }catch(err) {
+        console.log(err.message);
+      }
     }
+  
+    useEffect(()=> {getMyGroups()},[teacherId])
+
 
   async function getNouvelsAprove() {
     try {
         const response = await axios.get(`news/approvedNews`)
         setNouvelList(response.data.message)
-        console.log(response.data.message);
     }catch(err) {
       console.log(err.message);
     }
   }
 
-  const handleChange = (event) => {
-    setCheckedGroups({
-      ...checkedGroups,
-      [event.target.name]: event.target.checked,
-    });
-    console.log(checkedGroups)
-  };
+  const handleGroupCheck = (event,groupId) => {
+    let groupInfo = {isSelected: event.target.checked,groupId: groupId};
+    let itemExist = checkedGroups.find(item => item.groupId == groupId);
+    
+    if(!itemExist) {
+      setCheckedGroups([...checkedGroups,groupInfo]);
+    }else {
+      let newList = checkedGroups.map(item => item.groupId === groupId?groupInfo:item);
+      setCheckedGroups(newList);   
+    }
+  }
+
+  function groupIsSelected(listOfGroupInfo,id) {
+    let item = listOfGroupInfo.find(item => item.groupId === id);
+    return item?item.isSelected:false;
+  }
 
   const handleConfirm = async (event) => {
     event.preventDefault();
-    const objectt = object.toString();
-    const messagee = message.toString();
-    const groupss = groups.map(group => group.id);
-    console.log(groupss)
-    let newNews = {teacher_Id:"1",object:objectt,message:messagee,groups:groupss};
+    let GroupsConcernedNews = checkedGroups.filter(item => item.isSelected).map(item => item.groupId);
+    let newNews = {teacher_Id:teacherId.toString(),object:object,message:message,groups:GroupsConcernedNews};
     try{
         const response = await axios.post(`/news/create`,newNews,{
             headers: { 'Content-Type': 'application/json' }});
-            console.log(response)
             setCreateSuccess(response.data.success)
               setDisplayMsg(true)
-              setTimeout(handleClose,1000)
+              setTimeout(handleClose,500)
     }
     catch(err){
         console.log(err);
@@ -93,17 +99,17 @@ const NewsControl = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setObject('');
+    setMessage('');
+    setCheckedGroups([]);
+    setDisplayMsg(false);
   };
 
-
-  useEffect(() => {getGroups()},[]);
   useEffect(() => {getNouvelsAprove()},[]);
-
-
 
   return (
     <div style={{marginLeft:"10px",width:'100%' ,border: '1px solid #E5E5E5',
-        backgroundColor: 'white',borderRadius:'10px',maxWidth: '100%'}}
+        backgroundColor: 'white',borderRadius:'10px',maxWidth: '100%',height:'300px',marginBottom:'10px'}}
     >
         <div style={{height:'60px',display:'flex',alignItems: 'center',marginLeft:'10px'}}>
             <Typography variant="h6" style={{flex: 1}}>
@@ -144,12 +150,17 @@ const NewsControl = () => {
               <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
         <FormLabel component="legend">Select Groups</FormLabel>
         <FormGroup>
-            {groups.map((groupe) => <FormControlLabel 
+            {groups?groups.map((groupe) => 
+            <FormControlLabel 
+              key={groupe.id}
             control={
-                <Checkbox checked={`${checkedGroups[groupe.id-1]}`} onChange={handleChange} name={`${groupe.name}`}/>
+                <Checkbox 
+                  checked={groupIsSelected(checkedGroups,groupe.id)}
+                  onChange={(event) => handleGroupCheck(event,groupe.id)} 
+                  name={groupe.name}/>
             }
-            label={`${groupe.name}`}     
-            />)}
+            label={groupe.name}     
+            />):''}
         </FormGroup>
       </FormControl>
               <Button type="submit" style={{float:'right',marginTop:'30px'}}>Confirm</Button>
@@ -163,7 +174,7 @@ const NewsControl = () => {
             disablePadding
             sx={{ width: "100%",height: "85%",overflow: "auto",bgcolor: "background.paper"}}
         >
-            {nouvelList.map((nouvel) => {
+            {nouvelList?nouvelList.map((nouvel) => {
                 const labelId = `checkbox-list-secondary-label-${nouvel.new_Id}`;
                 return (
                     <div key={nouvel.new_Id} style={{margin:'5px',borderRadius:'10px'}}>
@@ -180,7 +191,7 @@ const NewsControl = () => {
                                 <Divider style={{width:"95%", marginRight:"auto",marginLeft:"auto"}}/>
                     </div>
                 );
-            })}
+            }):''}
             </List>
     </div>
   )

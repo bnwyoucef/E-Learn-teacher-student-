@@ -11,21 +11,32 @@ const TimeTable = () => {
     const [tuesdayList,setTuesdayList] = useState([])
     const [wednesdayList,setWednesdayList] = useState([])
     const [thursdayList,setThursdayList] = useState([])
+    const [teacherId,setTeacherId] = useState(0);
+
+    useEffect(() => {
+      if(localStorage.getItem('loginStatus')){
+        const loginStatus = JSON.parse(localStorage.getItem('loginStatus'))
+        setTeacherId(parseInt(loginStatus.currentUser.id));
+      }
+    },[])
   
     async function getLessons() {
+      
       try {
-        const response = await axios.get(`lessons/allOfSection=${1}/inSemester=1`)
-        setSundayList(response.data.message.sunday)
-        setMondayList(response.data.message.monday)
-        setTuesdayList(response.data.message.tuesday)
-        setWednesdayList(response.data.message.wednesday)
-        setThursdayList(response.data.message.thursday)
+        if(teacherId) {
+          const response = await axios.get(`lessons/ofTeacher/${teacherId}`)
+          setSundayList(response.data.message.sunday)
+          setMondayList(response.data.message.monday)
+          setTuesdayList(response.data.message.tuesday)
+          setWednesdayList(response.data.message.wednesday)
+          setThursdayList(response.data.message.thursday)
+        }
       } catch (error) {
         
       }
     }
 
-    useEffect(() =>{getLessons()},[])
+    useEffect(() =>{getLessons()},[teacherId])
   
     return (
       <div style= {{marginLeft:'10px',overflow: 'hidden',borderRadius: '10px',backgroundColor: 'white',height: '510px',border:'1px solid #E5E5E5'}}>
@@ -34,7 +45,7 @@ const TimeTable = () => {
             My schedule
           </Typography>
         </div>
-        <div style= {{padding:"10px",paddingBottom:"10px",overflow: 'hidden',backgroundColor: 'white',height: '430px',display: 'flex',justifyContent: 'center'}}>
+        <div style= {{paddingBottom:"10px",overflow: 'hidden',backgroundColor: 'white',height: '430px',display: 'flex',justifyContent: 'center'}}>
           <DaySessions dayName={'Sunday'} dayList={sundayList}/> 
           <DaySessions dayName={'Monday'} dayList={mondayList}/> 
           <DaySessions dayName={'Tuesday'} dayList={tuesdayList}/> 

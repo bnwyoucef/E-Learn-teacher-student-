@@ -5,11 +5,20 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import {Avatar,Typography,Divider} from "@mui/material";
+import GroupsIcon from '@mui/icons-material/Groups';
 import axios from '../../API/Axios'
 import { useState,useEffect } from 'react'
 
 const Groups = () => {
     const [groupsList,setGroupsList] = useState([])
+    const [teacherId,setTeacherId] = useState(0);
+
+    useEffect(() => {
+      if(localStorage.getItem('loginStatus')){
+        const loginStatus = JSON.parse(localStorage.getItem('loginStatus'))
+        setTeacherId(parseInt(loginStatus.currentUser.id));
+      }
+    },[])
   
     function compare( a, b ) {
       if ( a.name.toUpperCase() < b.name.toUpperCase() ){
@@ -21,16 +30,18 @@ const Groups = () => {
       return 0;
     }
   
-    async function getTeachers() {
+    async function getMyGroups() {
       try {
-        const response = await axios.get('teacher/all')
-        setGroupsList(response.data.message.sort(compare))
+        if(teacherId) {
+          const response = await axios.get(`teacher/${teacherId}/groups`)
+          setGroupsList(response.data.message.sort(compare))  
+        }
       }catch(err) {
         console.log(err.message);
       }
     }
   
-    useEffect(()=> {getTeachers()},[])
+    useEffect(()=> {getMyGroups()},[teacherId])
   
     return (
       <div style= {{marginLeft:'10px',overflow: 'hidden',borderRadius: '10px',backgroundColor: 'white',height: '50vh',border:'1px solid #E5E5E5'}}>
@@ -39,10 +50,11 @@ const Groups = () => {
             Groups
           </Typography>
         </div>
+        <Divider />
       <List
         dense
         disablePadding
-        sx={{ width: "100%",height: "85%",overflow: "auto",bgcolor: "background.paper",
+        sx={{ width: "100%",height: "85%",overflow: "auto",marginTop:'10px',bgcolor: "background.paper",
         //change the background color of item when it clicked
           '& .MuiListItemButton-root:focus': {
             bgcolor: '#7da9ff',
@@ -59,9 +71,11 @@ const Groups = () => {
             >
               <ListItemButton>
                 <ListItemAvatar>
-                  <Avatar>{value.name.charAt(0).toUpperCase()}</Avatar>
+                  <GroupsIcon color='primary'/>
                 </ListItemAvatar>
-                <ListItemText id={labelId} primary={`${value.name + ' ' + value.lastName}`} />
+                <ListItemText id={labelId} primary={value.name} />
+                <ListItemText id={labelId} primary={value.inSection} />
+                <ListItemText id={labelId} primary={value.inLevel} />
               </ListItemButton>
             </ListItem>
           );
