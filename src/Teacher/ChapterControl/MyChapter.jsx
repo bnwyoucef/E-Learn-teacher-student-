@@ -3,24 +3,27 @@ import {Typography,Button} from "@mui/material";
 import FileSystemNavigator from './TreeView'
 import axios from '../../API/Axios'
 import { useState,useEffect } from 'react' 
+import AddChapter from './AddChapter'
 
-const MyChapter = () => {
+const MyChapter = ( {theSelectedModule} ) => {
   const [chaptersList, setChaptersList] = useState([])
+  console.log(theSelectedModule);
 
-  let testingList = [{name:'chapter 1',cour:'courses',td:'td',tp:'tp'},{name:'chapter 2',cour:'courses',td:'td',tp:'tp'},{name:'chapter 3',cour:'courses',td:'td',tp:'tp'}];
 
   async function getChapterList() {
     try {
-        const response = await axios.get(`chapters/all`)
+      if(Object.keys(theSelectedModule).length > 0) {
+        const response = await axios.get(`chapters/of-module=${theSelectedModule.id}/InCurrentBatch`)
         setChaptersList(response.data.message)
         console.log("NNN ",response.data.message);
+      }
     }catch(err) {
       console.log(err.message);
     }
   }
 
 
-  useEffect(() => {getChapterList()},[])
+  useEffect(() => {getChapterList()},[theSelectedModule])
 
   return (
     <div style={{border:'1px solid #E5E5E5',width:'100%' ,border: '1px solid #E5E5E5',
@@ -29,10 +32,14 @@ const MyChapter = () => {
         <div style={{height:'60px',display:'flex',alignItems: 'center',marginLeft:'10px'}}>
             <Typography variant="h6" style={{flex: 1}}>
                 Chapters
-            </Typography>
-            <Button variant='contained' style={{marginRight:'10px'}}>Add Chapter</Button>
+            </Typography> 
+            <AddChapter theList={chaptersList}
+              setTheList={setChaptersList}
+              module={theSelectedModule}
+            />
+          
         </div>
-        <FileSystemNavigator testingList={testingList}/>
+        <FileSystemNavigator chapterList={chaptersList}/>
     </div>
   )
 }

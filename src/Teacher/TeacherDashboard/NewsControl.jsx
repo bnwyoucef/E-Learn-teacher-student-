@@ -169,6 +169,7 @@ const NewsControl = () => {
         </DialogContent>
       </Dialog>
         </div>
+      <Divider />
         <List
             dense
             disablePadding

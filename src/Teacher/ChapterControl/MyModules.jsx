@@ -1,44 +1,64 @@
 import React from 'react'
-import {Avatar,Typography} from "@mui/material";
+import {Typography} from "@mui/material";
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
+import './markStyle.css';
 import axios from '../../API/Axios'
 import { useState,useEffect } from 'react'
 
-const MyModules = () => {
+const MyModules = ({ setTheSelectedModule }) => {
     const [modulesList,setModulesList] = useState([])
+    const [teacherId,setTeacherId] = useState(0);
 
-    async function getModulesList() {
-        try {
-            const response = await axios.get('module/all')
-            setModulesList(response.data.message)
-        } catch (error) {
-            
+    useEffect(() => {
+        if(localStorage.getItem('loginStatus')){
+          const loginStatus = JSON.parse(localStorage.getItem('loginStatus'))
+          setTeacherId(parseInt(loginStatus.currentUser.id));
         }
-    }
+      },[])
 
-    useEffect(() =>{getModulesList()},[])
+      async function getMyModules() {
+        try {
+          if(teacherId) {
+            const response = await axios.get(`teacher/modulesOfTeacher/${teacherId}`)
+            setModulesList(response.data.message)
+          }
+        }catch(err) {
+          console.log(err.message);
+        }
+      }
+    
+      useEffect(()=> {getMyModules()},[teacherId])
   return (
-    <div style= {{borderRadius: '10px',backgroundColor: 'white',height: '220px',border:'1px solid #E5E5E5'}}>
+    <div style= {{borderRadius: '10px',backgroundColor: 'white',height: '300px',border:'1px solid #E5E5E5'}}>
         <div style= {{margin:'10px'}}>
             <Typography variant="h6" style={{flex: 1}}>
                 Modules
             </Typography>
         </div>
         <div style={{display: 'flex'}}>
-            {[].map(module => {
+            {modulesList.map(module => {
                 return (
-                    <div key={module.id} 
-                        style={{width:'150px',height:'150px',margin:'10px',border:'1px solid #E5E5E5',display: 'flex',flexDirection: 'column',alignItems: 'center',padding: '10px'
-                        }}
-                        onClick={()=> console.log(module.name)}
+                    <Card 
+                        className={'moduleCard'}
+                        key={module.id} 
+                        style={{width:'190px',height:'190px',margin:'10px',border:'1px solid #E5E5E5',display: 'flex',flexDirection: 'column',alignItems: 'center',padding: '10px',cursor: 'pointer'}}
+                        onClick={()=> setTheSelectedModule(module)}
                     >
-                        <Avatar >M</Avatar>
-                        <Typography variant="subtitle2">
-                            {module.shortName}
-                        </Typography>
-                        <Typography variant="body2" style={{textAlign: 'center'}}>
-                            {module.name}
-                        </Typography>
-                    </div>
+                    <CardMedia
+                      component="img"
+                      alt="green iguana"
+                      height="140"
+                      image="https://picsum.photos/200/200"
+                    />
+                    <CardContent>
+                      <Typography gutterBottom variant="subtitle2" component="div">
+                        {module.name}
+                      </Typography>
+                    </CardContent>
+                  </Card>
                 )
             })}
         </div>

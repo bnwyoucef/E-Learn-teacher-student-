@@ -7,7 +7,9 @@ import TreeItem, { treeItemClasses } from '@mui/lab/TreeItem';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import CircleIcon from '@mui/icons-material/Circle';
+import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
+import Link from '@mui/material/Link';
+import AddFile from './AddFile';
 
 
 const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
@@ -80,27 +82,37 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
       labelText: PropTypes.string.isRequired,
     };
 
-export default function FileSystemNavigator( {testingList} ) {
+export default function FileSystemNavigator( {chapterList} ) {
 
   return (
       <div>
-          {testingList.map((chapter) => {
+          {chapterList.length > 0 ?chapterList.map((chapter) => {
             return (
                 <TreeView
                   key={chapter.name}
                   aria-label="file system navigator"
                   defaultCollapseIcon={<ExpandMoreIcon />}
                   defaultExpandIcon={<ChevronRightIcon />}
-                  sx={{ height: 'auto',margin:'10px', flexGrow: 1, maxWidth: 400, overflowY: 'auto' }}
+                  sx={{ height: 'auto',margin:'10px', flexGrow: 1, maxWidth: '95%' }}
                 >
                   <TreeItem nodeId="1" label={chapter.name}>
-                    <StyledTreeItem nodeId="2" labelText={chapter.cour} labelIcon={CircleIcon} />
-                    <StyledTreeItem nodeId="3" labelText={chapter.td} labelIcon={CircleIcon} />
-                    <StyledTreeItem nodeId="4" labelText={chapter.tp} labelIcon={CircleIcon} />
+                    {chapter.files?chapter.files.map(file => {
+                      return (
+                        <div key={file.id} style={{display: 'flex',alignItems: 'center',marginLeft:'20px'}}>
+                          <PictureAsPdfOutlinedIcon style={{color:'red'}}/>
+                          <Link 
+                            style={{padding: '5px'}} target="_blank"
+                            href={`https://schoolsystemmanagement-production-9724.up.railway.app/chapter-files/${file.fileUrl}`} underline="hover">
+                            {file.name}
+                          </Link>
+                        </div>
+                      )
+                    }):''}
+                    <AddFile />
                   </TreeItem>
                 </TreeView>
             )
-          })}
+          }):<h3 style={{display: 'flex',justifyContent: 'center',}}>There is no chapter</h3>}
       </div>
   );
 }
