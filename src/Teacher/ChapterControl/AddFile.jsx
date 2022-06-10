@@ -6,19 +6,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
 import { useState,useEffect } from 'react';
-import IconButton from '@mui/material/IconButton';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import axios from '../../API/Axios';
 
-const AddFile = ({theList,setTheList,module}) => {
+const AddFile = ({theList,setTheList,chapterId}) => {
 
     const [open, setOpen] = useState(false);
     const [name,setName] = useState('')
-    const [description,setDescription] = useState('')
     const [displayMsg,setDisplayMsg] = useState(false);
     const [createSuccess,setCreateSuccess] = useState(false);
-    const [hasDataShow, setHasDataShow] = useState(true);
+    const [fileToUpload, setFileToUpload] = useState(null);
     
     const handleClickOpen = () => {
       setOpen(true);
@@ -27,33 +24,39 @@ const AddFile = ({theList,setTheList,module}) => {
     const handleClose = () => {
       setOpen(false);
       setName('')
-      setDescription('')
       setDisplayMsg(false)
     };
 
-    const handleChange = (event) => {
-      setHasDataShow(event.target.checked);
-    };
+
+    const handleFileSelect = (event) => {
+        console.log(event);
+        setFileToUpload(event.target.files[0]);
+    }
   
     const handleConfirm = async (event) => {
       event.preventDefault();
-      const newChapter = {name,description,module_Id:module.id}
+      const formData = new FormData();
+      formData.append('file', fileToUpload);
+      const newFile = {fileName:name,chapter_Id:chapterId,file:fileToUpload};
+      //formData.append('document', JSON.stringify(newFile));
       try {
-          const response = await axios.post(`chapters/create`,newChapter,{
-              headers: { 'Content-Type': 'application/json' }})
+          console.log(fileToUpload);
+          const response = await axios.post(`chapter-files/create`,newFile,{
+              headers: { 'Content-Type': 'multipart/form-data' }})
               setCreateSuccess(response.data.success)
               setDisplayMsg(true)
+              console.log(response.data);
               setTimeout(handleClose,500)
-              let newList = [...theList]
-              newList.push(response.data.message) 
-              setTheList(newList) 
+            //   let newList = [...theList]
+            //   newList.push(response.data.message) 
+            //   setTheList(newList) 
       } catch (error) {
           console.log('there is prblm: ' + error.message);
           setDisplayMsg(true)
       }
     }
   
-    useEffect(() => {setDisplayMsg(false)},[name,description,hasDataShow])
+    useEffect(() => {setDisplayMsg(false)},[name])
 
   return (
     <div style={{display: 'flex',justifyContent: 'center',padding:'10px 0px'}}>
@@ -81,16 +84,18 @@ const AddFile = ({theList,setTheList,module}) => {
                   value= {name}
                   onChange= {e => setName(e.target.value)}
               />
-              <TextField
-                  margin="dense"
-                  id="name"
-                  label="Description"
-                  type="text"
-                  fullWidth
-                  variant="outlined"
-                  value= {description}
-                  onChange= {e => setDescription(e.target.value)}
-              />
+                <Button
+                variant="contained"
+                component="label"
+                >
+                Upload File
+                <input
+                   
+                    type="file"
+                    hidden
+                    onChange={e => handleFileSelect(e)}
+                />
+                </Button>
               
               <Button type="submit" style={{float:'right',marginTop:'30px'}}>Confirm</Button>
               <Button onClick={handleClose} style={{float:'right',marginTop:'30px'}}>Cancel</Button>

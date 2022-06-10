@@ -11,7 +11,6 @@ import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import Link from '@mui/material/Link';
 import AddFile from './AddFile';
 
-
 const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
     color: theme.palette.text.secondary,
     [`& .${treeItemClasses.content}`]: {
@@ -108,7 +107,7 @@ export default function FileSystemNavigator( {chapterList} ) {
                         </div>
                       )
                     }):''}
-                    <AddFile />
+                    <AddFile chapterId={chapter.id}/>
                   </TreeItem>
                 </TreeView>
             )
