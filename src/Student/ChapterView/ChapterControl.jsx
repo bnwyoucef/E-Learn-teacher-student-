@@ -2,8 +2,8 @@ import React from 'react'
 import { Grid } from '@mui/material'
 import MyModules from './MyModules'
 import MyChapter from './MyChapter'
-import Header from '../Header'
-import {useState} from 'react';
+import Header from '../../Header'
+import {useState,useEffect} from 'react';
 
 const ChapterControl = () => {
 

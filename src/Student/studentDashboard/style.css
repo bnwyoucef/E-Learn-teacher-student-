@@ -1,0 +1,3 @@
+.listDisableOverfllow::-webkit-scrollbar{
+    display: none;
+}

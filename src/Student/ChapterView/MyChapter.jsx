@@ -7,12 +7,15 @@ import AddChapter from './AddChapter'
 
 const MyChapter = ( {theSelectedModule} ) => {
   const [chaptersList, setChaptersList] = useState([])
+  console.log(theSelectedModule);
+
 
   async function getChapterList() {
     try {
       if(Object.keys(theSelectedModule).length > 0) {
         const response = await axios.get(`chapters/of-module=${theSelectedModule.id}/InCurrentBatch`)
         setChaptersList(response.data.message)
+        console.log("NNN ",response.data.message);
       }
     }catch(err) {
       console.log(err.message);
@@ -36,7 +39,7 @@ const MyChapter = ( {theSelectedModule} ) => {
             />
           
         </div>
-        <FileSystemNavigator chapterList={chaptersList} setChaptersList={setChaptersList}/>
+        <FileSystemNavigator chapterList={chaptersList}/>
     </div>
   )
 }

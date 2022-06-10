@@ -81,7 +81,7 @@ const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
       labelText: PropTypes.string.isRequired,
     };
 
-export default function FileSystemNavigator( {chapterList,setChaptersList} ) {
+export default function FileSystemNavigator( {chapterList} ) {
 
   return (
       <div>
@@ -107,10 +107,7 @@ export default function FileSystemNavigator( {chapterList,setChaptersList} ) {
                         </div>
                       )
                     }):''}
-                    <AddFile chapterId={chapter.id} 
-                        theList={chapterList} 
-                        setTheList={setChaptersList}
-                    />
+                    <AddFile chapterId={chapter.id}/>
                   </TreeItem>
                 </TreeView>
             )

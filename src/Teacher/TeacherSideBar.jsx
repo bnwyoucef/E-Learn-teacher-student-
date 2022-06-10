@@ -5,7 +5,6 @@ import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import {Avatar} from '@mui/material'
 import Divider from '@mui/material/Divider';
@@ -117,15 +116,6 @@ const TeacherSideBar = () => {
   
     return (
       <Box sx={{ display: 'flex' }}>
-        {/* <CssBaseline /> */}
-        {/* <AppBar position="fixed" open={open}>
-          <Toolbar>
-            
-            <Typography variant="h6" noWrap component="div">
-              Mini variant drawer
-            </Typography>
-          </Toolbar>
-        </AppBar> */}
         <Drawer
         PaperProps={{
           sx: {

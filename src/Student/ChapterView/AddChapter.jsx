@@ -6,16 +6,16 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Alert from '@mui/material/Alert';
 import { useState,useEffect } from 'react';
-import UploadFileIcon from '@mui/icons-material/UploadFile';
 import axios from '../../API/Axios';
 
-const AddFile = ({theList,setTheList,chapterId}) => {
+const AddChapter = ({theList,setTheList,module}) => {
 
     const [open, setOpen] = useState(false);
     const [name,setName] = useState('')
+    const [description,setDescription] = useState('')
     const [displayMsg,setDisplayMsg] = useState(false);
     const [createSuccess,setCreateSuccess] = useState(false);
-    const [fileToUpload, setFileToUpload] = useState(null);
+    const [hasDataShow, setHasDataShow] = useState(true);
     
     const handleClickOpen = () => {
       setOpen(true);
@@ -24,27 +24,25 @@ const AddFile = ({theList,setTheList,chapterId}) => {
     const handleClose = () => {
       setOpen(false);
       setName('')
+      setDescription('')
       setDisplayMsg(false)
     };
 
-
-    const handleFileSelect = (event) => {
-        setFileToUpload(event.target.files[0]);
-    }
+    const handleChange = (event) => {
+      setHasDataShow(event.target.checked);
+    };
   
     const handleConfirm = async (event) => {
       event.preventDefault();
-      const newFile = {fileName:name,chapter_Id:chapterId,file:fileToUpload};
-
+      const newChapter = {name,description,module_Id:module.id}
       try {
-          const response = await axios.post(`chapter-files/create`,newFile,{
-              headers: { 'Content-Type': 'multipart/form-data' }})
+          const response = await axios.post(`chapters/create`,newChapter,{
+              headers: { 'Content-Type': 'application/json' }})
               setCreateSuccess(response.data.success)
               setDisplayMsg(true)
-              console.log(response.data.message.chapter);
               setTimeout(handleClose,500)
-              let newList = theList.map((item) => item.id === chapterId?response.data.message.chapter:item); 
-              console.log(newList);
+              let newList = [...theList]
+              newList.push(response.data.message) 
               setTheList(newList) 
       } catch (error) {
           console.log('there is prblm: ' + error.message);
@@ -52,18 +50,15 @@ const AddFile = ({theList,setTheList,chapterId}) => {
       }
     }
   
-    useEffect(() => {setDisplayMsg(false)},[name])
+    useEffect(() => {setDisplayMsg(false)},[name,description,hasDataShow])
 
   return (
-    <div style={{display: 'flex',justifyContent: 'center',padding:'10px 0px'}}>
-        <Button variant="contained" size="small" startIcon={<UploadFileIcon />}
-            style= {{boxShadow:'0px 4px 8px rgba(0,122,255,0.2)',borderRadius:'10px',marginLeft: 20}}
-            onClick={handleClickOpen}
-        >
-            Upload file
-        </Button>
+    <div>
+      <Button variant="contained" disabled = {!Object.keys(module).length > 0} onClick={handleClickOpen} size="small" style= {{boxShadow:'0px 4px 8px rgba(0,122,255,0.2)',borderRadius:'10px',marginRight: 10}}>
+        Add Chapter
+      </Button>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Upload File</DialogTitle>
+        <DialogTitle>Add Chapter</DialogTitle>
         <DialogContent>
             {displayMsg && createSuccess && <Alert severity="success">Chapter added successfully</Alert>}
             {displayMsg && !createSuccess && <Alert severity="error">Oops Something went wrong!</Alert>}
@@ -80,18 +75,16 @@ const AddFile = ({theList,setTheList,chapterId}) => {
                   value= {name}
                   onChange= {e => setName(e.target.value)}
               />
-                <Button
-                variant="contained"
-                component="label"
-                >
-                Upload File
-                <input
-                    accept="application/pdf"
-                    type="file"
-                    hidden
-                    onChange={e => handleFileSelect(e)}
-                />
-                </Button>
+              <TextField
+                  margin="dense"
+                  id="name"
+                  label="Description"
+                  type="text"
+                  fullWidth
+                  variant="outlined"
+                  value= {description}
+                  onChange= {e => setDescription(e.target.value)}
+              />
               
               <Button type="submit" style={{float:'right',marginTop:'30px'}}>Confirm</Button>
               <Button onClick={handleClose} style={{float:'right',marginTop:'30px'}}>Cancel</Button>
@@ -102,4 +95,4 @@ const AddFile = ({theList,setTheList,chapterId}) => {
   )
 }
 
-export default AddFile
+export default AddChapter

@@ -29,23 +29,27 @@ const AddFile = ({theList,setTheList,chapterId}) => {
 
 
     const handleFileSelect = (event) => {
+        console.log(event);
         setFileToUpload(event.target.files[0]);
     }
   
     const handleConfirm = async (event) => {
       event.preventDefault();
+      const formData = new FormData();
+      formData.append('file', fileToUpload);
       const newFile = {fileName:name,chapter_Id:chapterId,file:fileToUpload};
-
+      //    .append('document', JSON.stringify(newFile));
       try {
+          console.log(fileToUpload);
           const response = await axios.post(`chapter-files/create`,newFile,{
               headers: { 'Content-Type': 'multipart/form-data' }})
               setCreateSuccess(response.data.success)
               setDisplayMsg(true)
-              console.log(response.data.message.chapter);
+              console.log(response.data);
               setTimeout(handleClose,500)
-              let newList = theList.map((item) => item.id === chapterId?response.data.message.chapter:item); 
-              console.log(newList);
-              setTheList(newList) 
+            //   let newList = [...theList]
+            //   newList.push(response.data.message) 
+            //   setTheList(newList) 
       } catch (error) {
           console.log('there is prblm: ' + error.message);
           setDisplayMsg(true)
@@ -86,7 +90,7 @@ const AddFile = ({theList,setTheList,chapterId}) => {
                 >
                 Upload File
                 <input
-                    accept="application/pdf"
+                   
                     type="file"
                     hidden
                     onChange={e => handleFileSelect(e)}
