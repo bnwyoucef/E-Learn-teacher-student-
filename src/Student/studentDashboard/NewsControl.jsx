@@ -15,7 +15,7 @@ const NewsControl = () => {
   useEffect(() => {
     if(localStorage.getItem('loginStatus')){
       const loginStatus = JSON.parse(localStorage.getItem('loginStatus'))
-      setStudentId(parseInt(loginStatus.currentUser.group_Id));
+      setStudentId(parseInt(loginStatus.currentUser.group.id));
     }
   },[])
 
@@ -23,7 +23,6 @@ const NewsControl = () => {
     try {
       if(studentId) {
         const response = await axios.get(`news/ofGroup/${studentId}`);
-        // const response = await axios.get(`news/news_to_approve`);
         let items = response.data.message.map(item => {
           return (
             <div style={{background: 'white',border: '1px solid #E5E5E5',height:'200px',margin:'0 10px',display:'flex',justifyContent: 'center',flexDirection:'column',alignItems:'center',padding:'0 5px'}} onDragStart={handleDragStart} role="presentation">

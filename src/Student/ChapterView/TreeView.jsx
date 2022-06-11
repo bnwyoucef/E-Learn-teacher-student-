@@ -9,7 +9,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import PictureAsPdfOutlinedIcon from '@mui/icons-material/PictureAsPdfOutlined';
 import Link from '@mui/material/Link';
-import AddFile from './AddFile';
 
 const StyledTreeItemRoot = styled(TreeItem)(({ theme }) => ({
     color: theme.palette.text.secondary,
@@ -107,7 +106,6 @@ export default function FileSystemNavigator( {chapterList} ) {
                         </div>
                       )
                     }):''}
-                    <AddFile chapterId={chapter.id}/>
                   </TreeItem>
                 </TreeView>
             )

@@ -16,7 +16,7 @@ const StudentTimeTable = () => {
     useEffect(() => {
       if(localStorage.getItem('loginStatus')){
         const loginStatus = JSON.parse(localStorage.getItem('loginStatus'))
-        setGroupId(parseInt(loginStatus.currentUser.group_Id));
+        setGroupId(parseInt(loginStatus.currentUser.group.id));
       }
     },[])
   
@@ -24,7 +24,6 @@ const StudentTimeTable = () => {
       try {
         if(groupId) {
           const response = await axios.get(`lessons/ofGroup/${groupId}`);
-          console.log(response.data.message);
           setSundayList(response.data.message.sunday)
           setMondayList(response.data.message.monday)
           setTuesdayList(response.data.message.tuesday)

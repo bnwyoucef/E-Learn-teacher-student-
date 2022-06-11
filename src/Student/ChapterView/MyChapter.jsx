@@ -33,11 +33,6 @@ const MyChapter = ( {theSelectedModule} ) => {
             <Typography variant="h6" style={{flex: 1}}>
                 Chapters
             </Typography> 
-            <AddChapter theList={chaptersList}
-              setTheList={setChaptersList}
-              module={theSelectedModule}
-            />
-          
         </div>
         <FileSystemNavigator chapterList={chaptersList}/>
     </div>
