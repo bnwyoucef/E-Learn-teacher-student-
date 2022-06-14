@@ -10,19 +10,20 @@ import { useState,useEffect } from 'react'
 
 const MyModules = ({ setTheSelectedModule }) => {
     const [modulesList,setModulesList] = useState([])
-    const [teacherId,setTeacherId] = useState(0);
+    const [groupId,setGroupId] = useState(0);
 
     useEffect(() => {
         if(localStorage.getItem('loginStatus')){
           const loginStatus = JSON.parse(localStorage.getItem('loginStatus'))
-          setTeacherId(parseInt(loginStatus.currentUser.id));
+          setGroupId(parseInt(loginStatus.currentUser.batch.level.id));
         }
       },[])
 
       async function getMyModules() {
         try {
-          if(teacherId) {
-            const response = await axios.get(`teacher/modulesOfTeacher/${teacherId}`)
+          if(groupId) {
+            const response = await axios.get(`module/OfLevel/${groupId}`);
+            console.log(response.data.message); 
             setModulesList(response.data.message)
           }
         }catch(err) {
@@ -30,7 +31,8 @@ const MyModules = ({ setTheSelectedModule }) => {
         }
       }
     
-      useEffect(()=> {getMyModules()},[teacherId])
+      useEffect(()=> {getMyModules()},[groupId]);
+
   return (
     <div style= {{borderRadius: '10px',backgroundColor: 'white',height: '300px',border:'1px solid #E5E5E5'}}>
         <div style= {{margin:'10px'}}>

@@ -30,11 +30,7 @@ const StudentMarksFill = () => {
     useEffect(() => {getAllModules()},[studentId]);
 
   return (
-    <div style={{border:'1px solid #E5E5E5',width:'100%' ,border: '1px solid #E5E5E5',
-        backgroundColor: 'white',borderRadius:'4px',height:'500px'}}
-    >
         <MarksTable marksList={moduleList}/>
-    </div>
   )
 }
 
