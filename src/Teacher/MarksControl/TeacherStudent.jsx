@@ -5,25 +5,27 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
-import SelectLevel from './SelectLevel'
 import SelectGroup from './SelectGroup'
 import axios from '../../API/Axios'
 import { useState,useEffect } from 'react'
 
-const TeacherStudent = () => {
+const TeacherStudent = ( {setCurrentStudent}) => {
 
-    const [studentsList,setStudentsList] = useState([])
+    const [studentsList,setStudentsList] = useState([]);
+    const [currentGroup,setCurrentGroup] = useState(0);
 
     async function getAllStudents() {
         try {
             const response = await axios.get('student/all')
-            setStudentsList(response.data.message)
+            let newList = response.data.message.filter(student => student.group.id === currentGroup); 
+            setStudentsList(newList);
         } catch (error) {
             
         }
     }
 
-    useEffect(() =>{getAllStudents()},[])
+    useEffect(() =>{getAllStudents()},[currentGroup])
+
   return (
     <div style={{border:'1px solid #E5E5E5',width:'100%' ,border: '1px solid #E5E5E5',
         backgroundColor: 'white',borderRadius:'4px',height:'500px'}}
@@ -32,8 +34,7 @@ const TeacherStudent = () => {
             <Typography variant="h6">
                 Fill Marks
             </Typography>
-            <SelectLevel />
-            <SelectGroup />
+            <SelectGroup currentGroup={currentGroup} setCurrentGroup={setCurrentGroup}/>
         </div> 
         <Divider /> 
     <List
@@ -47,12 +48,13 @@ const TeacherStudent = () => {
           },
         }}
       >
-        {studentsList.map((value) => {
+        {studentsList.length > 0?studentsList.map((value) => {
           const labelId = `checkbox-list-secondary-label-${value.id}`;
           return (
             <ListItem
               key={value.id}
               disablePadding
+              onClick={event => setCurrentStudent(value)}
             >
               <ListItemButton>
                 <ListItemAvatar>
@@ -62,7 +64,15 @@ const TeacherStudent = () => {
               </ListItemButton>
             </ListItem>
           );
-        })}
+        }):<div style={{display: 'flex', justifyContent: 'center',marginTop:'30px'}}>
+            {currentGroup === 0 ? <Typography variant="h6">
+                Select the group please
+              </Typography>:
+              <Typography variant="h6">
+                There is no student in this group
+              </Typography>
+            }
+          </div>}
       </List> 
     </div>
   )

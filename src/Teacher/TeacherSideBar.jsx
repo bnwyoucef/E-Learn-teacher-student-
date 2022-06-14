@@ -243,7 +243,8 @@ const TeacherSideBar = () => {
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
           {/* <TeacherDashboard teacherLoged={currentTeacher} /> */}
-          <ChapterControl />
+          <MarksControl />
+          {/* <ChapterControl /> */}
         </Box>
       </Box>
     );
