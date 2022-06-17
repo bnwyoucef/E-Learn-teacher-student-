@@ -136,6 +136,7 @@ const TeacherSideBar = () => {
     };
 
     const [exitOpen,setExitOpen] = React.useState(false);
+
     const handleClickOpen = () => {
       setExitOpen(true);
     };
@@ -149,7 +150,7 @@ const TeacherSideBar = () => {
       localStorage.setItem('loginStatus',JSON.stringify({loginSucceeded}));
       handleClose();
       window.location.reload();
-  }
+    }
   
     return (
       <Box sx={{ display: 'flex' }}>

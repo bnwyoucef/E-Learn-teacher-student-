@@ -40,7 +40,7 @@ const NewsControl = () => {
       try {
         if(teacherId) {
           const response = await axios.get(`teacher/${teacherId}/groups`)
-          setMyGroups(response.data.message)  
+          setMyGroups(response.data.message);  
         }
       }catch(err) {
         console.log(err.message);
@@ -53,7 +53,7 @@ const NewsControl = () => {
   async function getNouvelsAprove() {
     try {
         const response = await axios.get(`news/approvedNews`)
-        setNouvelList(response.data.message)
+        setNouvelList(response.data.message.reverse());
     }catch(err) {
       console.log(err.message);
     }
@@ -157,9 +157,10 @@ const NewsControl = () => {
                 <Checkbox 
                   checked={groupIsSelected(checkedGroups,groupe.id)}
                   onChange={(event) => handleGroupCheck(event,groupe.id)} 
-                  name={groupe.name}/>
+                  name={groupe.name+' '+groupe.inSection+' '+groupe.inLevel}
+                />
             }
-            label={groupe.name}     
+            label={groupe.name+' '+groupe.inSection+' '+groupe.inLevel}     
             />):''}
         </FormGroup>
       </FormControl>
@@ -173,7 +174,7 @@ const NewsControl = () => {
         <List
             dense
             disablePadding
-            sx={{ width: "100%",height: "85%",overflow: "auto",bgcolor: "background.paper"}}
+            sx={{ width: "100%",height: "230px",overflow: "auto",bgcolor: "background.paper"}}
         >
             {nouvelList?nouvelList.map((nouvel) => {
                 const labelId = `checkbox-list-secondary-label-${nouvel.new_Id}`;
@@ -187,9 +188,9 @@ const NewsControl = () => {
                                 <ListItemText id={labelId} primary={`${nouvel.object}`}  
                                 secondary={`${nouvel.message}`} /> 
                             </ListItemButton>
-                            <img src={`https://schooolsystemmanagement-production.up.railway.app/news/files/${nouvel.fileUrl}`} alt='nouvel' style={{margin:'5px',height:128,width:215}} />
+                            {/* <img src={`https://schooolsystemmanagement-production.up.railway.app/news/files/${nouvel.fileUrl}`} alt='nouvel' style={{margin:'5px',height:128,width:215}} /> */}
                         </ListItem>
-                                <Divider style={{width:"95%", marginRight:"auto",marginLeft:"auto"}}/>
+                        <Divider style={{width:"98%", marginRight:"auto",marginLeft:"auto"}}/>
                     </div>
                 );
             }):''}

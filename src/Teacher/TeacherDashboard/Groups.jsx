@@ -74,8 +74,8 @@ const Groups = () => {
                   <GroupsIcon color='primary'/>
                 </ListItemAvatar>
                 <ListItemText id={labelId} primary={value.name} />
-                <ListItemText id={labelId} primary={value.inSection} />
-                <ListItemText id={labelId} primary={value.inLevel} />
+                <ListItemText id={labelId} primary={value.inSection} style={{color:'#3282B8'}}/>
+                <ListItemText id={labelId} primary={value.inLevel} style={{color:'#3282B8'}}/>
               </ListItemButton>
             </ListItem>
           );

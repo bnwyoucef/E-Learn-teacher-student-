@@ -40,12 +40,12 @@ const TimeTable = () => {
   
     return (
       <div style= {{marginLeft:'10px',overflow: 'hidden',borderRadius: '10px',backgroundColor: 'white',height: '510px',border:'1px solid #E5E5E5'}}>
-        <div style={{padding:"10px"}}>
-          <Typography variant="h6" style={{flex: 1}}>
-            My schedule
+        <div style={{height:'60px',display: 'flex',alignItems: 'center',marginLeft:'10px'}}>
+          <Typography variant="h5" style={{color:'#3282B8'}}>
+            My Schedule
           </Typography>
         </div>
-        <div style= {{paddingBottom:"10px",overflow: 'hidden',backgroundColor: 'white',height: '430px',display: 'flex',justifyContent: 'center'}}>
+        <div style= {{overflow: 'hidden',backgroundColor: 'white',height: '460px',display: 'flex',justifyContent: 'center'}}>
           <DaySessions dayName={'Sunday'} dayList={sundayList}/> 
           <DaySessions dayName={'Monday'} dayList={mondayList}/> 
           <DaySessions dayName={'Tuesday'} dayList={tuesdayList}/> 

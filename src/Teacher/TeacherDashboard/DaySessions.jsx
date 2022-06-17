@@ -18,7 +18,7 @@ const DaySessions = ({dayName,dayList}) => {
           dense
           disablePadding
           className='listDisableOverfllow'
-          sx={{ width: "100%",height: "85%",overflow: "auto",bgcolor: "background.paper",
+          sx={{ width: "100%",height: "90%",overflow: "auto",bgcolor: "background.paper",
           //change the background color of item when it clicked
             '& .MuiListItemButton-root:focus': {
               bgcolor: '#7da9ff',
@@ -29,7 +29,7 @@ const DaySessions = ({dayName,dayList}) => {
           {dayList?dayList.map((lesson) => {
             const labelId = `checkbox-list-secondary-label-${lesson.id}`;
             return (
-              <div key={lesson.id}>
+              <div key={lesson.id} >
                 <ListItem
                   disablePadding
                 >

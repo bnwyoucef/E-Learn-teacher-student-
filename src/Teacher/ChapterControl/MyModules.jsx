@@ -3,7 +3,7 @@ import {Typography} from "@mui/material";
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
+import imagesLink from '../../Constants/constants';
 import './markStyle.css';
 import axios from '../../API/Axios'
 import { useState,useEffect } from 'react'
@@ -40,7 +40,7 @@ const MyModules = ({ setTheSelectedModule }) => {
             </Typography>
         </div>
         <div style={{display: 'flex'}}>
-            {modulesList.map(module => {
+            {modulesList.map((module,index) => {
                 return (
                     <Card 
                         className={'moduleCard'}
@@ -52,7 +52,7 @@ const MyModules = ({ setTheSelectedModule }) => {
                       component="img"
                       alt="green iguana"
                       height="140"
-                      image="https://picsum.photos/200/200"
+                      image={imagesLink[index]}
                     />
                     <CardContent>
                       <Typography gutterBottom variant="subtitle2" component="div">

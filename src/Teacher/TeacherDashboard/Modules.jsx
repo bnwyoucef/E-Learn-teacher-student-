@@ -3,8 +3,7 @@ import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import {Avatar,Typography,Divider} from "@mui/material";
+import {Typography,Divider} from "@mui/material";
 import BookIcon from '@mui/icons-material/Book';
 import axios from '../../API/Axios'
 import { useState,useEffect } from 'react'
@@ -19,7 +18,7 @@ const Modules = () => {
         const loginStatus = JSON.parse(localStorage.getItem('loginStatus'))
         setTeacherId(parseInt(loginStatus.currentUser.id));
       }
-    },[])
+    },[]);
   
     function compare( a, b ) {
       if ( a.name.toUpperCase() < b.name.toUpperCase() ){
@@ -34,8 +33,8 @@ const Modules = () => {
     async function getMyModules() {
       try {
         if(teacherId) {
-          const response = await axios.get(`teacher/modulesOfTeacher/${teacherId}`)
-          setModulesList(response.data.message.sort(compare))
+          const response = await axios.get(`teacher/modulesOfTeacher/${teacherId}`);
+          setModulesList(response.data.message.sort(compare));
         }
       }catch(err) {
         console.log(err.message);
@@ -72,8 +71,8 @@ const Modules = () => {
             >
               <ListItemButton>
               <BookIcon color='primary'/>
-                <ListItemText id={labelId} primary={value.name} style={{marginLeft:"10px"}} />
-                <ListItemText id={labelId} primary={value.isTheLecturer?"Lecturer":""} style={{marginLeft:"10px"}} />
+                <ListItemText id={labelId} primary={value.name} style={{marginLeft:"10px",width:"70%"}} />
+                <ListItemText id={labelId} primary={value.isTheLecturer === "0"?"":"Lecturer"} style={{marginLeft:"10px",color:'#3282B8'}} />
               </ListItemButton>
             </ListItem>
           );
