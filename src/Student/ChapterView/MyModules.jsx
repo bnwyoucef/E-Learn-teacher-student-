@@ -22,9 +22,9 @@ const MyModules = ({ setTheSelectedModule }) => {
       async function getMyModules() {
         try {
           if(groupId) {
-            const response = await axios.get(`module/OfLevel/${groupId}`);
-            console.log(response.data.message); 
-            setModulesList(response.data.message)
+            const response = await axios.get(`module/OfLevel/${groupId}`); 
+            setModulesList(response.data.message);
+            console.log('hey:',response.data.message);
           }
         }catch(err) {
           console.log(err.message);

@@ -2,9 +2,8 @@ import React from 'react'
 import { Grid } from '@mui/material'
 import NewsControl from './NewsControl'
 import StudentTimeTable from './StudentTimeTable'
-import Header from '../../Header'
 
-const StudentDashboard = ({teacherLoged}) => {
+const StudentDashboard = () => {
   return (
     <div>
       <Grid container spacing={1}>
@@ -12,7 +11,7 @@ const StudentDashboard = ({teacherLoged}) => {
             <NewsControl />
         </Grid>
         <Grid item xs={12}>
-          <StudentTimeTable teacherId={teacherLoged.id}/>
+          <StudentTimeTable />
         </Grid>
       </Grid>
     </div>

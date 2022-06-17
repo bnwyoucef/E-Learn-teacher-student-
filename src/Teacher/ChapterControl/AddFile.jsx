@@ -38,14 +38,13 @@ const AddFile = ({theList,setTheList,chapterId}) => {
 
       try {
           const response = await axios.post(`chapter-files/create`,newFile,{
-              headers: { 'Content-Type': 'multipart/form-data' }})
-              setCreateSuccess(response.data.success)
-              setDisplayMsg(true)
-              console.log(response.data.message.chapter);
-              setTimeout(handleClose,500)
-              let newList = theList.map((item) => item.id === chapterId?response.data.message.chapter:item); 
-              console.log(newList);
-              setTheList(newList) 
+              headers: { 'Content-Type': 'multipart/form-data' }});
+              setCreateSuccess(response.data.success);
+              setDisplayMsg(true);
+              setTimeout(handleClose,500);
+              let newList = theList.map((item) => item.id === chapterId?response.data.message:item); 
+              console.log(response.data.message);
+              setTheList(newList);
       } catch (error) {
           console.log('there is prblm: ' + error.message);
           setDisplayMsg(true)

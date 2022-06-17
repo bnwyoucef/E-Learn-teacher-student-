@@ -27,6 +27,12 @@ import StudentDashboard from './studentDashboard/StudentDashBoard'
 import ChapterControl from './ChapterView/ChapterControl';
 import MarksControl from './MarksView/MarksControl'
 import {useState,useEffect} from 'react';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Button from '@mui/material/Button';
 
 const drawerWidth = 240;
 
@@ -96,6 +102,21 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 const StudentSidebar = () => {
+  const [browse,setBrowse] = useState('Home');
+
+  function broswsingPage(page) {
+    switch(page) {
+      case 'Home':
+        return  <StudentDashboard />
+      case 'Chapters':
+        return  <ChapterControl />
+      case 'My Marks':
+        return <MarksControl />
+      default: 
+        return
+    }
+  }
+
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
     const [currentTeacher,setCurrentUser] = useState({})
@@ -113,6 +134,23 @@ const StudentSidebar = () => {
     const handleDrawerClose = () => {
       setOpen(false);
     };
+
+    const [exitOpen,setExitOpen] = React.useState(false);
+    
+    const handleClickOpen = () => {
+      setExitOpen(true);
+    };
+  
+    const handleClose = () => {
+      setExitOpen(false);
+    };
+
+    const handleExit = async () => {
+      const loginSucceeded = false
+      localStorage.setItem('loginStatus',JSON.stringify({loginSucceeded}));
+      handleClose();
+      window.location.reload();
+    }
   
     return (
       <Box sx={{ display: 'flex' }}>
@@ -177,9 +215,10 @@ const StudentSidebar = () => {
               },
           },
           }}>
-            {['Dashboard','Chapters management','Marks management'].map((text, index) => (
+            {['Home','Chapters','My Marks'].map((text, index) => (
               <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
+                  onClick={e => setBrowse(text)}
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? 'initial' : 'center',
@@ -216,7 +255,7 @@ const StudentSidebar = () => {
                 },
             },
             }}>
-            {['Chat', 'Settings', 'Exit'].map((text, index) => (
+            {['Exit'].map((text, index) => (
               <ListItem key={text} disablePadding sx={{ display: 'block' }}>
                 <ListItemButton
                   sx={{
@@ -224,6 +263,7 @@ const StudentSidebar = () => {
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
                   }}
+                  
                 >
                   <ListItemIcon
                     sx={{
@@ -232,9 +272,30 @@ const StudentSidebar = () => {
                       justifyContent: 'center',
                     }}
                   >
-                    {index === 0 ? <ChatIcon /> : index === 1 ? <SettingsIcon/> : <LogoutIcon/>}
+                    <LogoutIcon onClick={handleClickOpen}/>
+                    <Dialog
+                        open={exitOpen}
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title">
+                            Exit
+                        </DialogTitle>
+                        <DialogContent>
+                        <DialogContentText id="alert-dialog-description">
+                            are you sure to Exit the application?
+                        </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                        <Button onClick={handleClose}>Cancel</Button>
+                        <Button onClick={handleExit} autoFocus>
+                            Confirm
+                        </Button>
+                        </DialogActions>
+                    </Dialog>
                   </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} onClick={handleClickOpen}/>
                 </ListItemButton>
               </ListItem>
             ))}
@@ -242,9 +303,7 @@ const StudentSidebar = () => {
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
           <DrawerHeader />
-          <ChapterControl />
-          {/* <StudentDashboard teacherLoged={currentTeacher} /> */}
-          {/* <MarksControl /> */}
+          {broswsingPage(browse)}
         </Box>
       </Box> 
     );

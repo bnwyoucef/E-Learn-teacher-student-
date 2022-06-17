@@ -24,6 +24,7 @@ const MyModules = ({ setTheSelectedModule }) => {
           if(teacherId) {
             const response = await axios.get(`teacher/modulesOfTeacher/${teacherId}`)
             setModulesList(response.data.message)
+            console.log('hey:',response.data.message);
           }
         }catch(err) {
           console.log(err.message);

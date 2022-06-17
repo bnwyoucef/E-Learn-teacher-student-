@@ -52,7 +52,7 @@ const NewsControl = () => {
     }
   };
   return (
-    <div style={{display: 'flex',position: 'relative',alignItems: 'center',justifyContent: 'center',width:'100%',height:'220px',marginTop: '-85px'}}>
+    <div  style={{display: 'flex',position: 'relative',alignItems: 'center',justifyContent: 'center',width:'100%',height:'220px',marginTop: '-85px'}}>
       <div style={{width:'100%',position:'absolute'}}>
         <AliceCarousel mouseTracking items={newsList}
           duration={400}
@@ -72,7 +72,6 @@ const NewsControl = () => {
         
       </div>
     </div>
-
   );
 }
 
