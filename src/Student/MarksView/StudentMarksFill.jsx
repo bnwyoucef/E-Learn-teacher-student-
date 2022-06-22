@@ -19,7 +19,6 @@ const StudentMarksFill = () => {
         if(studentId > 0){
             try {
                 const response = await axios.get(`marks/ofStudent=${studentId}/InSemester=${1}`);
-                console.log('hey:',response.data.message);
                 setModulesList(response.data.message);
             } catch (error) {
                 

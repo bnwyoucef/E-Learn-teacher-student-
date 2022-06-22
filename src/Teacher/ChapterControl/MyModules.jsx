@@ -52,7 +52,7 @@ const MyModules = ({ setTheSelectedModule }) => {
                       component="img"
                       alt="green iguana"
                       height="140"
-                      image={imagesLink[index]}
+                      image={`https://school-systemmanagement-production.up.railway.app/module/images/${module.imageUrl}`}
                     />
                     <CardContent>
                       <Typography gutterBottom variant="subtitle2" component="div">

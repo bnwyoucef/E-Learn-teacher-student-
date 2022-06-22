@@ -32,8 +32,7 @@ const SelectGroup = ( {currentGroup,setCurrentGroup} ) => {
       try {
         if(teacherId) {
           const response = await axios.get(`teacher/${teacherId}/groups`)
-          setGroupsList(response.data.message.sort(compare))
-          console.log(response.data.message);  
+          setGroupsList(response.data.message.sort(compare))  
         }
       }catch(err) {
         console.log(err.message);

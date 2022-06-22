@@ -35,7 +35,7 @@ const AddFile = ({theList,setTheList,chapterId}) => {
     const handleConfirm = async (event) => {
       event.preventDefault();
       const newFile = {fileName:name,chapter_Id:chapterId,file:fileToUpload};
-
+      
       try {
           const response = await axios.post(`chapter-files/create`,newFile,{
               headers: { 'Content-Type': 'multipart/form-data' }});
@@ -43,7 +43,6 @@ const AddFile = ({theList,setTheList,chapterId}) => {
               setDisplayMsg(true);
               setTimeout(handleClose,500);
               let newList = theList.map((item) => item.id === chapterId?response.data.message:item); 
-              console.log(response.data.message);
               setTheList(newList);
       } catch (error) {
           console.log('there is prblm: ' + error.message);

@@ -26,7 +26,8 @@ const NewsControl = () => {
     const [groups,setMyGroups] = useState([]);
     const [displayMsg,setDisplayMsg] = useState(false);
     const [createSuccess,setCreateSuccess] = useState(false);
-    const [checkedGroups,setCheckedGroups] = useState([])
+    const [checkedGroups,setCheckedGroups] = useState([]);
+    const [imageToUpload,setImageToUpload] = useState(null);
     const [teacherId,setTeacherId] = useState(0);
 
     useEffect(() => {
@@ -79,17 +80,29 @@ const NewsControl = () => {
   const handleConfirm = async (event) => {
     event.preventDefault();
     let GroupsConcernedNews = checkedGroups.filter(item => item.isSelected).map(item => item.groupId);
-    let newNews = {teacher_Id:teacherId.toString(),object:object,message:message,groups:GroupsConcernedNews};
+    let newNews = {teacher_Id:teacherId.toString(),object:object,message:message,file:imageToUpload};
+    GroupsConcernedNews.forEach((item, index)=>{
+      newNews[`groups[${index}]`] = item;
+    })
+    
+    // const fd = new FormData()
+    // fd.append("file",imageToUpload);
+    // fd.append("teacher_Id",teacherId.toString());
+    // fd.append("object", object);
+    // fd.append("message", message);
+    // fd.append("groups", JSON.stringify(GroupsConcernedNews));
+    
     try{
         const response = await axios.post(`/news/create`,newNews,{
-            headers: { 'Content-Type': 'application/json' }});
+          headers: { 'Content-Type': 'multipart/form-data' }});//multipart/form-data
             setCreateSuccess(response.data.success)
-              setDisplayMsg(true)
-              setTimeout(handleClose,500)
+            setDisplayMsg(true)
+            console.log(response.data.message);
+            setTimeout(handleClose,500)
     }
     catch(err){
         console.log(err);
-        setDisplayMsg(true)
+        setDisplayMsg(true);
     }
   }
 
@@ -106,6 +119,10 @@ const NewsControl = () => {
   };
 
   useEffect(() => {getNouvelsAprove()},[]);
+
+  const handleFileSelect = (event) => {
+    setImageToUpload(event.target.files[0]);
+  }
 
   return (
     <div style={{marginLeft:"10px",width:'100%' ,border: '1px solid #E5E5E5',
@@ -147,6 +164,17 @@ const NewsControl = () => {
                   rows={3}
                   onChange= {e => setMessage(e.target.value)}
               />
+              <Button
+                variant="contained"
+                component="label"
+              >
+                Upload File
+                <input
+                    type="file"
+                    hidden
+                    onChange={e => handleFileSelect(e)}
+                />
+              </Button>
               <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
         <FormLabel component="legend">Select Groups</FormLabel>
         <FormGroup>
@@ -188,7 +216,10 @@ const NewsControl = () => {
                                 <ListItemText id={labelId} primary={`${nouvel.object}`}  
                                 secondary={`${nouvel.message}`} /> 
                             </ListItemButton>
-                            {/* <img src={`https://schooolsystemmanagement-production.up.railway.app/news/files/${nouvel.fileUrl}`} alt='nouvel' style={{margin:'5px',height:128,width:215}} /> */}
+                            <img src={`https://school-systemmanagement-production.up.railway.app/news/files/${nouvel.fileUrl}`} 
+                            alt='nouvel' 
+                            style={{margin:'5px',height:128,width:215}}
+                             />
                         </ListItem>
                         <Divider style={{width:"98%", marginRight:"auto",marginLeft:"auto"}}/>
                     </div>

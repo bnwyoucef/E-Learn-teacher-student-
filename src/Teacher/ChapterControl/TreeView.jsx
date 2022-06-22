@@ -101,7 +101,7 @@ export default function FileSystemNavigator( {chapterList,setChaptersList} ) {
                           <PictureAsPdfOutlinedIcon style={{color:'red'}}/>
                           <Link 
                             style={{padding: '5px'}} target="_blank"
-                            href={`https://schoolsystemmanagement-production-9724.up.railway.app/chapter-files/${file.fileUrl}`} underline="hover">
+                            href={`https://school-systemmanagement-production.up.railway.app/chapter-files/${file.fileUrl}`} underline="hover">
                             {file.name}
                           </Link>
                         </div>

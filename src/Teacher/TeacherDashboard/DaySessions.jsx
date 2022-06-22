@@ -34,7 +34,7 @@ const DaySessions = ({dayName,dayList}) => {
                   disablePadding
                 >
                   <ListItemButton style={{display: 'flex',flexDirection:'column'}}>
-                    <ListItemText style={{textAlign: 'center',color: '#3282B8'}} id={labelId} primary={lesson.group.name} />
+                    <ListItemText style={{textAlign: 'center',color: '#3282B8'}} id={labelId} primary={lesson.group?lesson.group.name:''} />
                     <ListItemText style={{textAlign: 'center'}} id={labelId} primary={`${lesson.module.name + ' ' + 'Mr.' +lesson.teacher.name}`} />
                     <ListItemText style={{textAlign: 'center',color: '#3282B8'}} id={labelId} primary={`${lesson.startingTime + ' - ' + lesson.endingTime}`} />
                     <ListItemText style={{textAlign: 'center',color: '#3282B8'}} id={labelId} primary={lesson.sale.name} />

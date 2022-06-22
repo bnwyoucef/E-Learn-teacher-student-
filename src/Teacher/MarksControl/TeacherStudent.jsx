@@ -12,7 +12,7 @@ import { useState,useEffect } from 'react'
 const TeacherStudent = ( {setCurrentStudent}) => {
 
     const [studentsList,setStudentsList] = useState([]);
-    const [currentGroup,setCurrentGroup] = useState(0);
+    const [currentGroup,setCurrentGroup] = useState('');
 
     async function getAllStudents() {
         try {
@@ -28,11 +28,11 @@ const TeacherStudent = ( {setCurrentStudent}) => {
 
   return (
     <div style={{border:'1px solid #E5E5E5',width:'100%' ,border: '1px solid #E5E5E5',
-        backgroundColor: 'white',borderRadius:'4px',height:'500px'}}
+        backgroundColor: 'white',borderRadius:'10px',height:'600px'}}
     >
         <div style={{height:'60px',display:'flex',alignItems: 'center',marginLeft:'10px'}}>
             <Typography variant="h6">
-                Fill Marks
+                Student Marks
             </Typography>
             <SelectGroup currentGroup={currentGroup} setCurrentGroup={setCurrentGroup}/>
         </div> 
@@ -65,9 +65,11 @@ const TeacherStudent = ( {setCurrentStudent}) => {
             </ListItem>
           );
         }):<div style={{display: 'flex', justifyContent: 'center',marginTop:'30px'}}>
-            {currentGroup === 0 ? <Typography variant="h6">
+            {currentGroup === '' ? 
+              <Typography variant="h6">
                 Select the group please
-              </Typography>:
+              </Typography>
+              :
               <Typography variant="h6">
                 There is no student in this group
               </Typography>

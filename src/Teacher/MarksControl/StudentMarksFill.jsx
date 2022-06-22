@@ -1,22 +1,44 @@
 import React from 'react'
-import {Typography,Avatar,TextField,Button} from "@mui/material";
+import {Typography,Divider,TextField,Button} from "@mui/material";
 import BookIcon from '@mui/icons-material/Book';
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
+
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
+
 import axios from '../../API/Axios'
 import { useState,useEffect } from 'react';
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+  
+
 const StudentMarksFill = ( {currentStudent} ) => {
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+      setOpen(true);
+    };
+  
+    const handleClose = () => {
+      setOpen(false);
+    };
 
     const [moduleList,setModulesList] = useState([]);
     const [teacherId,setTeacherId] = useState(0);
     const [emd1,setEmd1] = useState('');
     const [emd2,setEmd2] = useState('');
     const [cc,setCc] = useState('');
-    let buttonState = [];
 
     useEffect(() => {
       if(localStorage.getItem('loginStatus')){
@@ -44,9 +66,8 @@ const StudentMarksFill = ( {currentStudent} ) => {
         if(emd2 !== '') newRow.emd2 = parseInt(emd2, 10);
         if(cc !== '') newRow.cc = parseInt(cc, 10);
         try {
-            console.log(newRow);
             const response = await axios.post(`marks/newRow`,newRow);
-            console.log(response.data);
+            handleClose();
         } catch (error) {
             
         }
@@ -58,19 +79,18 @@ const StudentMarksFill = ( {currentStudent} ) => {
 
   return (
     <div style={{border:'1px solid #E5E5E5',width:'100%' ,border: '1px solid #E5E5E5',
-        backgroundColor: 'white',borderRadius:'4px',height:'500px'}}
+        backgroundColor: 'white',borderRadius:'10px',height:'600px'}}
     >
-        <div style={{height:'120px',display:'flex',flexDirection:'column',alignItems: 'center',marginLeft:'10px',marginBottom:'30px'}}>
-            <Avatar style={{height:'80px',width:'80px',marginTop:'10px'}}>H</Avatar>
-            <Typography variant="h6" style={{flex: 1}}>
-                Student
-            </Typography>
-            
+        <div style={{height:'60px',display:'flex',alignItems: 'center',justifyContent: 'center'}}>
+            <Typography variant="h6">
+                Fill marks
+            </Typography> 
         </div> 
+        <Divider />
         <List
             dense
             disablePadding
-            sx={{ width: "100%",height: "87%",overflow: "auto",bgcolor: "background.paper",
+            sx={{ width: "100%",height: "530px",overflow: "auto",bgcolor: "background.paper",
             //change the background color of item when it clicked
             '& .MuiListItemButton-root:focus': {
                 bgcolor: '#7da9ff',
@@ -82,8 +102,8 @@ const StudentMarksFill = ( {currentStudent} ) => {
             const labelId = `checkbox-list-secondary-label-${value.id}`;
             return (
                 <ListItem
-                key={value.id}
-                disablePadding
+                  key={value.id}
+                  disablePadding
                 >
                 <ListItemButton>
                     <ListItemAvatar>
@@ -110,10 +130,28 @@ const StudentMarksFill = ( {currentStudent} ) => {
                     <Button 
                         variant='contained' size='small' 
                         style={{margin:'0 10px',  textTransform:'none',height:'80%',alignSelf:'center'}}
-                        onClick={event => handleMarkRegister(value.id)}
+                        onClick={handleClickOpen}
                     >
                         Register
                     </Button>
+                    <Dialog
+                        open={open}
+                        TransitionComponent={Transition}
+                        keepMounted
+                        onClose={handleClose}
+                        aria-describedby="alert-dialog-slide-description"
+                    >
+                        <DialogTitle>{"Mark Register"}</DialogTitle>
+                        <DialogContent>
+                        <DialogContentText id="alert-dialog-slide-description">
+                            Are you sure to rigister this mark?
+                        </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                        <Button onClick={handleClose}>Disagree</Button>
+                        <Button onClick={() => handleMarkRegister(value.id)}>Agree</Button>
+                        </DialogActions>
+                    </Dialog>
                 </div>
                 </ListItem>
             );
